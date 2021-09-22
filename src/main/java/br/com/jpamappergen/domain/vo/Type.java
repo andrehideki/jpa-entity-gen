@@ -6,7 +6,19 @@ import br.com.jpamappergen.domain.errors.type.TypeUnsuportedException;
 
 public enum Type {
 	VARCHAR,
-	DECIMAL;
+	INT,
+	BOOLEAN,
+	TINYINT,
+	SMALLINT,
+	BIGINT,
+	IDENTITY,
+	DECIMAL,
+	DOUBLE,
+	REAL,
+	TIME,
+	DATE,
+	TIMESTAMP,
+	CHAR;
 	
 	public static Type getType(String value) {
 		return Stream.of(Type.values())
