@@ -33,5 +33,12 @@
 			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- AUX -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+		</dependency>
 	</dependencies>
 </project>
