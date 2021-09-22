@@ -2,7 +2,7 @@ package br.com.jpamappergen.domain.entity;
 
 import java.util.List;
 
-import br.com.jpamappergen.domain.errors.TableException;
+import br.com.jpamappergen.domain.errors.table.TableNotFoundException;
 
 public class Database {
 
@@ -16,6 +16,6 @@ public class Database {
 		return tables.stream()
 					.filter(table -> table.getName().equals(name))
 					.findFirst()
-					.orElseThrow(() -> new TableException(name));
+					.orElseThrow(() -> new TableNotFoundException(name));
 	}
 }
