@@ -6,3 +6,6 @@
 
 #maven
 /target/
+
+#h2
+/h2/*
