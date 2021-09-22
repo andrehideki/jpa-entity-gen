@@ -1,6 +1,7 @@
 package br.com.jpamappergen.domain.usecase.readtable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,18 @@ public class ReadTableTest {
 	}
 	
 	@Test
-	public void shouldReadAndTable() {
+	public void shouldReadTableName() {
 		ReadTableOutput output = readTable.execute(ReadTableInput.builder()
 				.name("person")
 				.build());
 		assertEquals("person", output.getName());
+	}
+	
+	@Test
+	public void shouldReadTableColumns() {
+		ReadTableOutput output = readTable.execute(ReadTableInput.builder()
+				.name("person")
+				.build());
+		assertTrue(output.getDataColumns().stream().anyMatch(column -> column.getName().equals("NAME")));
 	}
 }
