@@ -18,4 +18,8 @@ public class Database {
 					.findFirst()
 					.orElseThrow(() -> new TableNotFoundException(name));
 	}
+
+	public List<Table> getTables() {
+		return this.tables;
+	}
 }
