@@ -43,19 +43,23 @@ public class JDBCAdapter {
 		}
 	}
 
-	public Table getTable(String name) throws Exception {
-		Statement stmt = conn.createStatement();
-		ResultSet resultSet = stmt.executeQuery("SELECT * FROM " + name);
-		ResultSetMetaData metaData = resultSet.getMetaData();
-		int i = 1;
-		List<DataColumn> columns = new ArrayList<>();
-		while (i != metaData.getColumnCount() + 1) {
-			String label = metaData.getColumnLabel(i);
-			String type = metaData.getColumnTypeName(i);
-			columns.add(new DataColumn(label, type));
-			i++;
+	public Table getTable(String name) {
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet resultSet = stmt.executeQuery("SELECT * FROM " + name);
+			ResultSetMetaData metaData = resultSet.getMetaData();
+			int i = 1;
+			List<DataColumn> columns = new ArrayList<>();
+			while (i != metaData.getColumnCount() + 1) {
+				String label = metaData.getColumnLabel(i);
+				String type = metaData.getColumnTypeName(i);
+				columns.add(new DataColumn(label, type));
+				i++;
+			}
+			stmt.close();
+			return new Table(name, columns);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to get Table", e);
 		}
-		stmt.close();
-		return new Table(name, columns);
 	}
 }
