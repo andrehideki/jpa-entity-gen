@@ -3,6 +3,8 @@ package br.com.jpamappergen.domain.usecase.readalltables;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ public class ReadAllTablesTest {
 	@Test
 	public void shouldReadAllTableNames() {
 		ReadAllTablesOutput output = readAllTables.execute();
-		assertEquals(asList("person"), output.getTables());
+		assertEquals(asList("PERSON", "JOB").stream().sorted().collect(Collectors.toList()), output.getTables().stream().sorted().collect(Collectors.toList()));
 	}
 	
 }

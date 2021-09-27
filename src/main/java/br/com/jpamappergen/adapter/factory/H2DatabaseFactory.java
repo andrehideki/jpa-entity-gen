@@ -1,9 +1,6 @@
 package br.com.jpamappergen.adapter.factory;
 
-import static java.util.Arrays.asList;
-
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 import br.com.jpamappergen.domain.entity.Database;
 import br.com.jpamappergen.domain.errors.database.DatabaseFailedCreateException;
@@ -29,10 +26,6 @@ public class H2DatabaseFactory implements DatabaseFactory {
 
 	private Database create() throws Exception {
 		this.jdbcAdapter.runScript(Paths.get("h2_start.sql"));
-		this.jdbcAdapter.getTables().forEach(System.out::println);
-		return new Database(asList("person")
-				.stream()
-				.map(tableName -> this.jdbcAdapter.getTable(tableName))
-				.collect(Collectors.toList()));
+		return new Database(this.jdbcAdapter.getTables());
 	}
 }

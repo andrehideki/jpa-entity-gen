@@ -4,3 +4,7 @@ CREATE TABLE person (
 	age INT NOT NULL
 );
 
+CREATE TABLE job (
+	name VARCHAR(255) NOT NULL,
+	salary DOUBLE NOT NULL
+);
