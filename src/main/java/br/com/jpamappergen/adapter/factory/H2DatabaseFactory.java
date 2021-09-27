@@ -29,6 +29,7 @@ public class H2DatabaseFactory implements DatabaseFactory {
 
 	private Database create() throws Exception {
 		this.jdbcAdapter.runScript(Paths.get("h2_start.sql"));
+		this.jdbcAdapter.getTables().forEach(System.out::println);
 		return new Database(asList("person")
 				.stream()
 				.map(tableName -> this.jdbcAdapter.getTable(tableName))

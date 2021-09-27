@@ -3,6 +3,7 @@ package br.com.jpamappergen.infra;
 import java.io.FileReader;
 import java.nio.file.Path;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -40,6 +41,22 @@ public class JDBCAdapter {
 			RunScript.execute(conn, new FileReader(scriptPath.toFile()));
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to run Script", e);
+		}
+	}
+	
+	public List<Table> getTables() {
+		try {
+			DatabaseMetaData metaData = conn.getMetaData();
+			ResultSet result = metaData.getTables(null, null, "%", new String[]{ "TABLE" });
+			List<Table> tables = new ArrayList<>();
+			while (result.next()) {
+				String tableName = result.getString("TABLE_NAME");
+				Table table = this.getTable(tableName);
+				tables.add(table);
+			}
+			return tables;
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to get Tables", e);
 		}
 	}
 
