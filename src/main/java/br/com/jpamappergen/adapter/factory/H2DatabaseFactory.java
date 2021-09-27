@@ -17,21 +17,26 @@ import br.com.jpamappergen.domain.entity.Database;
 import br.com.jpamappergen.domain.entity.Table;
 import br.com.jpamappergen.domain.errors.database.DatabaseFailedCreateException;
 import br.com.jpamappergen.domain.factory.DatabaseFactory;
+import br.com.jpamappergen.infra.JDBCAdapter;
 
 public class H2DatabaseFactory implements DatabaseFactory {
 
+	private JDBCAdapter jdbcAdapter;
+	
+	
+	
 	@Override
 	public Database createDatabase() {
 		try {
 			return create();
 		} catch (Exception e) {
-			throw new DatabaseFailedCreateException();
+			throw new DatabaseFailedCreateException(e);
 		}
 	}
 
 	private Database create() throws Exception {
 		Connection conn = DriverManager.getConnection("jdbc:h2:mem:./h2/db", "admin", "admin");  
-		Statement stmt = conn.createStatement();  
+		Statement stmt = conn.createStatement();
 		RunScript.execute(conn, new FileReader(new File("h2_start.sql")));
 		ResultSet resultSet = stmt.executeQuery("SELECT * FROM person");
 		ResultSetMetaData metaData = resultSet.getMetaData();

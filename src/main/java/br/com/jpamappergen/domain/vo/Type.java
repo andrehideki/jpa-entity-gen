@@ -3,10 +3,13 @@ package br.com.jpamappergen.domain.vo;
 import java.util.stream.Stream;
 
 import br.com.jpamappergen.domain.errors.type.TypeUnsuportedException;
+import lombok.Getter;
 
+@Getter
 public enum Type {
 	VARCHAR,
 	INT,
+	INTEGER,
 	BOOLEAN,
 	TINYINT,
 	SMALLINT,
@@ -19,6 +22,7 @@ public enum Type {
 	DATE,
 	TIMESTAMP,
 	CHAR;
+	
 	
 	public static Type getType(String value) {
 		return Stream.of(Type.values())
