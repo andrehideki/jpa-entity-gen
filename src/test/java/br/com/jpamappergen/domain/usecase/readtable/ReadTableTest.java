@@ -31,16 +31,24 @@ public class ReadTableTest {
 	@Test
 	public void shouldReadTableName() {
 		ReadTableOutput output = readTable.execute(ReadTableInput.builder()
-				.name("person")
+				.name("PERSON")
 				.build());
-		assertEquals("person", output.getName());
+		assertEquals("PERSON", output.getName());
 	}
 	
 	@Test
 	public void shouldReadTableColumns() {
 		ReadTableOutput output = readTable.execute(ReadTableInput.builder()
-				.name("person")
+				.name("PERSON")
 				.build());
 		assertTrue(output.getDataColumns().stream().anyMatch(column -> column.getName().equals("NAME")));
+	}
+	
+	@Test
+	public void shouldReadPrimaryKey() {
+		ReadTableOutput output = readTable.execute(ReadTableInput.builder()
+				.name("PERSON")
+				.build());
+		assertEquals("NAME", output.getPrimaryKey().get(0).getName());
 	}
 }

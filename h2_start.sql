@@ -1,6 +1,6 @@
 
 CREATE TABLE person (
-	name VARCHAR(255) NOT NULL,
+	name VARCHAR(255) PRIMARY KEY NOT NULL,
 	age INT NOT NULL
 );
 

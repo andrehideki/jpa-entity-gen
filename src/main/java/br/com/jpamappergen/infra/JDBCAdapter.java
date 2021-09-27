@@ -14,6 +14,7 @@ import java.util.List;
 import org.h2.tools.RunScript;
 
 import br.com.jpamappergen.domain.entity.DataColumn;
+import br.com.jpamappergen.domain.entity.PrimaryKey;
 import br.com.jpamappergen.domain.entity.Table;
 
 public class JDBCAdapter {
@@ -74,9 +75,24 @@ public class JDBCAdapter {
 				i++;
 			}
 			stmt.close();
-			return new Table(name, columns);
+			return new Table(name, columns, getPrimaryKey(name));
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to get Table", e);
+		}
+	}
+	
+	public PrimaryKey getPrimaryKey(String tableName) {
+		try {
+			DatabaseMetaData metaData = conn.getMetaData();
+			ResultSet result = metaData.getPrimaryKeys(null, null, tableName);
+			List<DataColumn> columns = new ArrayList<>();
+			while (result.next()) {
+				String label = result.getString("COLUMN_NAME");
+				columns.add(new DataColumn(label, "INTEGER"));
+			}
+			return new PrimaryKey(columns);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to get primary key", e);
 		}
 	}
 }

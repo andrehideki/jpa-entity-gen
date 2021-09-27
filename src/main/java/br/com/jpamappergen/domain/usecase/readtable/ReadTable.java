@@ -23,6 +23,9 @@ public class ReadTable {
 				.dataColumns(table.getColumns().stream()
 						.map(column -> new DataColumnOutput(column.getName(), column.getType().toString()))
 						.collect(Collectors.toList()))
+				.primaryKey(table.getPrimaryKey().getColumns().stream()
+										.map(column -> new DataColumnOutput(column.getName(), column.getType().toString()))
+										.collect(Collectors.toList()))
 				.build();
 	}
 }

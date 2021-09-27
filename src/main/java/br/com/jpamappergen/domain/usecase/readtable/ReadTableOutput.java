@@ -11,6 +11,7 @@ import lombok.Data;
 public class ReadTableOutput {
 	private String name;
 	private List<DataColumnOutput> dataColumns;
+	private List<DataColumnOutput> primaryKey;
 	
 	@Data
 	@AllArgsConstructor
