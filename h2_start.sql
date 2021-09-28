@@ -10,7 +10,7 @@ CREATE TABLE job (
 );
 
 CREATE TABLE person_job (
-	person_name VARCHAR(255) PRIMARY KEY NOT NULL,
-	job_name VARCHAR(255) PRIMARY KEY NOT NULL,
-	salary DOUBLE NOT NULL
+	person_name VARCHAR(255) NOT NULL,
+	job_name VARCHAR(255) NOT NULL,
+	PRIMARY KEY (person_name, job_name)
 );

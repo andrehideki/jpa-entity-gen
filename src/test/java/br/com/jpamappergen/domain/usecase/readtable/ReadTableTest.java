@@ -1,7 +1,11 @@
 package br.com.jpamappergen.domain.usecase.readtable;
 
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,5 +54,13 @@ public class ReadTableTest {
 				.name("PERSON")
 				.build());
 		assertEquals("NAME", output.getPrimaryKey().get(0).getName());
+	}
+	
+	@Test
+	public void shouldReadComposedPrimaryKey() {
+		ReadTableOutput output = readTable.execute(ReadTableInput.builder()
+				.name("PERSON_JOB")
+				.build());
+		assertEquals(asList("JOB_NAME", "PERSON_NAME"), output.getPrimaryKey().stream().map(column -> column.getName()).sorted().collect(Collectors.toList()));
 	}
 }

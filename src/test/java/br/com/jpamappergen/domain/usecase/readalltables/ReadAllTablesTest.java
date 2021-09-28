@@ -33,7 +33,7 @@ public class ReadAllTablesTest {
 	@Test
 	public void shouldReadAllTableNames() {
 		ReadAllTablesOutput output = readAllTables.execute();
-		assertEquals(asList("PERSON", "JOB").stream().sorted().collect(Collectors.toList()), output.getTables().stream().sorted().collect(Collectors.toList()));
+		assertEquals(asList("PERSON", "JOB", "PERSON_JOB").stream().sorted().collect(Collectors.toList()), output.getTables().stream().sorted().collect(Collectors.toList()));
 	}
 	
 }
