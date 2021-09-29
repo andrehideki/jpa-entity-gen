@@ -11,6 +11,6 @@ public class GenerateClass {
 	}
 
 	public void execute(GenerateClassInput input) {
-		generator.generate(input.getClassName());
+		generator.generate(input.getClassName(), input.getProperties());
 	}
 }

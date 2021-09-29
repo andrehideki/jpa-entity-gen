@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +25,18 @@ public class GenerateClassTest {
 	public void should_generate_classfile() {
 		generateClass.execute(GenerateClassInput.builder()
 									.className("MyClass")
-									.json("{ type:object }")
 									.build());
 		assertTrue(Files.exists(Paths.get("MyClass.java")));
+	}
+	
+	@Test
+	public void should_generate_classfile_with_one_property() {
+		Map<String, Class<?>> properties = new HashMap<>();
+		properties.put("age", Integer.class);
+		generateClass.execute(GenerateClassInput.builder()
+				.className("MyClass2")
+				.properties(properties)
+				.build());
+		assertTrue(Files.exists(Paths.get("MyClass2.java")));
 	}
 }

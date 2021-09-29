@@ -1,8 +1,9 @@
 package br.com.jpamappergen.infra.jsonschema2pojo;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jsonschema2pojo.GenerationConfig;
 import org.jsonschema2pojo.NoopAnnotator;
@@ -11,31 +12,40 @@ import org.jsonschema2pojo.SchemaMapper;
 import org.jsonschema2pojo.SchemaStore;
 import org.jsonschema2pojo.rules.RuleFactory;
 
+import com.google.gson.Gson;
 import com.sun.codemodel.JCodeModel;
 
 import br.com.jpamappergen.domain.service.ClassGenerator;
 
 public class JsonSchema2PojoClassGenerator implements ClassGenerator {
 
+	
 	@Override
-	public void generate(String className) {
+	public void generate(String className, Map<String, Class<?>> properties) {
 		try {
-			generateClass(className);
+			generateClass(className, properties);
 		} catch (Exception e) {
 			throw new RuntimeException("Error at Class Generating:", e);
 		}
 	}
 	
-	private void generateClass(String className) throws Exception {
+	private void generateClass(String className, Map<String, Class<?>> properties) throws Exception {
 		JCodeModel codeModel = new JCodeModel();
-		GenerationConfig config = new JsonSchema2PojoConfig();		
+		GenerationConfig config = new JsonSchema2PojoConfig();
 		SchemaMapper mapper = new SchemaMapper(new RuleFactory(config, new NoopAnnotator(), new SchemaStore()), new SchemaGenerator());
-		mapper.generate(codeModel, className, "", "{\"type\":\"object\"  }");
+		mapper.generate(codeModel, className, "", convertToJsonProperties(properties));
 		Path destPath = Paths.get("./");
-		if (!Files.exists(destPath)) {
-			Files.createDirectory(destPath);
-		}
 		codeModel.build(destPath.toFile());
 	}
 	
+	private String convertToJsonProperties(Map<String, Class<?>> properties) {
+		Map<String, JsonSchemaPropety> adaptedProperties = new HashMap<>();
+		for (String key: properties.keySet()) {
+			String type = properties.get(key).getSimpleName().toLowerCase();
+			adaptedProperties.put(key, new JsonSchemaPropety(type));
+		}
+		JsonSchema schema = new JsonSchema("object", adaptedProperties);
+		String json = new Gson().toJson(schema);
+		return json;
+	}
 }
