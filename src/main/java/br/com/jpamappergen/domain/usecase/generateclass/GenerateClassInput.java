@@ -1,7 +1,8 @@
 package br.com.jpamappergen.domain.usecase.generateclass;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +14,14 @@ public class GenerateClassInput {
 	private String className;
 	
 	@Builder.Default
-	private Map<String, Class<?>> properties = new HashMap<>();
+	private List<GenerateClassPropertyInput> properties = new ArrayList<>();
+	
+	@Data
+	@Builder
+	public static class GenerateClassPropertyInput {
+		private String name;
+		private Class<?> clazz;
+		@Builder.Default
+		private Optional<Class<?>> annotation = Optional.empty();
+	}
 }

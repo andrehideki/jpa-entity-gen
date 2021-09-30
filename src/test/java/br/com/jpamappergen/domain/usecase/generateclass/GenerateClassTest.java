@@ -1,15 +1,16 @@
 package br.com.jpamappergen.domain.usecase.generateclass;
 
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.jpamappergen.domain.usecase.generateclass.GenerateClassInput.GenerateClassPropertyInput;
 import br.com.jpamappergen.infra.jsonschema2pojo.JsonSchema2PojoClassGenerator;
 
 public class GenerateClassTest {
@@ -31,8 +32,10 @@ public class GenerateClassTest {
 	
 	@Test
 	public void should_generate_classfile_with_one_property() {
-		Map<String, Class<?>> properties = new HashMap<>();
-		properties.put("age", Integer.class);
+		List<GenerateClassPropertyInput> properties = asList(
+				GenerateClassPropertyInput.builder().name("age").clazz(Integer.class).build(),
+				GenerateClassPropertyInput.builder().name("name").clazz(String.class).build()
+		);
 		generateClass.execute(GenerateClassInput.builder()
 				.className("MyClass2")
 				.properties(properties)
