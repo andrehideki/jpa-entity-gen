@@ -1,10 +1,8 @@
 import javax.persistence.Column;
-import javax.persistence.Id;
 
 public class MyClass2 {
 
-    @Column
-    @Id
+    @Column(name = "TESTE")
     private Integer age;
 
     public Integer getAge() {

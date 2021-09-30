@@ -1,4 +1,4 @@
-package br.com.jpamappergen.domain.usecase.generateclass;
+package br.com.jpamappergen.domain.usecase.generatemapperclass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,21 +9,21 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GenerateClassInput {
+public class GenerateMapperClassInput {
 	
 	private String className;
 	
 	@Builder.Default
-	private List<GenerateClassPropertyInput> properties = new ArrayList<>();
+	private List<GenerateMapperClassPropertyInput> properties = new ArrayList<>();
 	
 	@Data
-	public static class GenerateClassPropertyInput {
+	public static class GenerateMapperClassPropertyInput {
 		private String name;
 		private Class<?> clazz;
 		private Optional<Class<?>> annotation = Optional.empty();
 		
 		@Builder
-		public GenerateClassPropertyInput(String name, Class<?> clazz, Class<?> annotation) {
+		public GenerateMapperClassPropertyInput(String name, Class<?> clazz, Class<?> annotation) {
 			this.name = name;
 			this.clazz = clazz;
 			this.annotation = annotation !=null? Optional.of(annotation): Optional.empty();

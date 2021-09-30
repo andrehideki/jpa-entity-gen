@@ -1,4 +1,4 @@
-package br.com.jpamappergen.domain.usecase.generateclass;
+package br.com.jpamappergen.domain.usecase.generatemapperclass;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,21 +12,23 @@ import javax.persistence.Column;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.jpamappergen.domain.usecase.generateclass.GenerateClassInput.GenerateClassPropertyInput;
+import br.com.jpamappergen.domain.usecase.generatemapperclass.GenerateMapperClass;
+import br.com.jpamappergen.domain.usecase.generatemapperclass.GenerateMapperClassInput;
+import br.com.jpamappergen.domain.usecase.generatemapperclass.GenerateMapperClassInput.GenerateMapperClassPropertyInput;
 import br.com.jpamappergen.infra.jsonschema2pojo.JsonSchema2PojoClassGenerator;
 
-public class GenerateClassTest {
+public class GenerateMapperClassTest {
 	
-	private GenerateClass generateClass;
+	private GenerateMapperClass generateMapperClass;
 	
 	@BeforeEach
 	public void setup() {
-		generateClass = new GenerateClass(new JsonSchema2PojoClassGenerator());
+		generateMapperClass = new GenerateMapperClass(new JsonSchema2PojoClassGenerator());
 	}
 	
 	@Test
 	public void should_generate_classfile() {
-		generateClass.execute(GenerateClassInput.builder()
+		generateMapperClass.execute(GenerateMapperClassInput.builder()
 									.className("MyClass")
 									.build());
 		assertTrue(Files.exists(Paths.get("MyClass.java")));
@@ -34,10 +36,10 @@ public class GenerateClassTest {
 	
 	@Test
 	public void should_generate_classfile_with_one_property() {
-		List<GenerateClassPropertyInput> properties = asList(
-				GenerateClassPropertyInput.builder().name("age").clazz(Integer.class).build()
+		List<GenerateMapperClassPropertyInput> properties = asList(
+				GenerateMapperClassPropertyInput.builder().name("age").clazz(Integer.class).build()
 		);
-		generateClass.execute(GenerateClassInput.builder()
+		generateMapperClass.execute(GenerateMapperClassInput.builder()
 				.className("MyClass2")
 				.properties(properties)
 				.build());
@@ -46,14 +48,14 @@ public class GenerateClassTest {
 	
 	@Test
 	public void should_generate_classfile_with_annotation() {
-		List<GenerateClassPropertyInput> properties = asList(
-				GenerateClassPropertyInput.builder()
+		List<GenerateMapperClassPropertyInput> properties = asList(
+				GenerateMapperClassPropertyInput.builder()
 					.name("name")
 					.clazz(String.class)
 					.annotation(Column.class)
 					.build()
 				);
-		generateClass.execute(GenerateClassInput.builder()
+		generateMapperClass.execute(GenerateMapperClassInput.builder()
 				.className("MyClass3")
 				.properties(properties)
 				.build());
