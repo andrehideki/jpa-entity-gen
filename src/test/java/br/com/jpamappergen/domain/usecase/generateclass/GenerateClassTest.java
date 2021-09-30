@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,13 +35,28 @@ public class GenerateClassTest {
 	@Test
 	public void should_generate_classfile_with_one_property() {
 		List<GenerateClassPropertyInput> properties = asList(
-				GenerateClassPropertyInput.builder().name("age").clazz(Integer.class).build(),
-				GenerateClassPropertyInput.builder().name("name").clazz(String.class).build()
+				GenerateClassPropertyInput.builder().name("age").clazz(Integer.class).build()
 		);
 		generateClass.execute(GenerateClassInput.builder()
 				.className("MyClass2")
 				.properties(properties)
 				.build());
 		assertTrue(Files.exists(Paths.get("MyClass2.java")));
+	}
+	
+	@Test
+	public void should_generate_classfile_with_annotation() {
+		List<GenerateClassPropertyInput> properties = asList(
+				GenerateClassPropertyInput.builder()
+					.name("name")
+					.clazz(String.class)
+					.annotation(Column.class)
+					.build()
+				);
+		generateClass.execute(GenerateClassInput.builder()
+				.className("MyClass3")
+				.properties(properties)
+				.build());
+		assertTrue(Files.exists(Paths.get("MyClass3.java")));
 	}
 }

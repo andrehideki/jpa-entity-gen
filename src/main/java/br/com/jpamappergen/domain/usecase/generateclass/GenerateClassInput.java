@@ -17,11 +17,16 @@ public class GenerateClassInput {
 	private List<GenerateClassPropertyInput> properties = new ArrayList<>();
 	
 	@Data
-	@Builder
 	public static class GenerateClassPropertyInput {
 		private String name;
 		private Class<?> clazz;
-		@Builder.Default
 		private Optional<Class<?>> annotation = Optional.empty();
+		
+		@Builder
+		public GenerateClassPropertyInput(String name, Class<?> clazz, Class<?> annotation) {
+			this.name = name;
+			this.clazz = clazz;
+			this.annotation = annotation !=null? Optional.of(annotation): Optional.empty();
+		}
 	}
 }
