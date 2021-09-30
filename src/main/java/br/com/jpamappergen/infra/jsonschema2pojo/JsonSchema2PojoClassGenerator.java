@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jsonschema2pojo.GenerationConfig;
-import org.jsonschema2pojo.NoopAnnotator;
 import org.jsonschema2pojo.SchemaGenerator;
 import org.jsonschema2pojo.SchemaMapper;
 import org.jsonschema2pojo.SchemaStore;
@@ -33,7 +32,7 @@ public class JsonSchema2PojoClassGenerator implements ClassGenerator {
 	private void generateClass(String className, List<ClassGeneratorPropertyInput> properties) throws Exception {
 		JCodeModel codeModel = new JCodeModel();
 		GenerationConfig config = new JsonSchema2PojoConfig();
-		SchemaMapper mapper = new SchemaMapper(new RuleFactory(config, new NoopAnnotator(), new SchemaStore()), new SchemaGenerator());
+		SchemaMapper mapper = new SchemaMapper(new RuleFactory(config, new JpaAnnotator(), new SchemaStore()), new SchemaGenerator());
 		mapper.generate(codeModel, className, "", convertToJsonProperties(properties));
 		Path destPath = Paths.get("./");
 		codeModel.build(destPath.toFile());
