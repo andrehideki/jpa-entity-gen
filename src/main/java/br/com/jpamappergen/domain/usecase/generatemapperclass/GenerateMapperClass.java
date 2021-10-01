@@ -1,10 +1,16 @@
 package br.com.jpamappergen.domain.usecase.generatemapperclass;
 
+import static java.util.Arrays.asList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.Column;
+
 import br.com.jpamappergen.domain.service.ClassGenerator;
-import br.com.jpamappergen.domain.service.ClassGeneratorPropertyInput;
+import br.com.jpamappergen.domain.service.ClassGeneratorProperty;
+import br.com.jpamappergen.domain.service.ClassGeneratorProperty.ClassGeneratorPropertyAnnotation;
+import br.com.jpamappergen.domain.service.ClassGeneratorProperty.ClassGeneratorPropertyAnnotationAttribute;
 
 public class GenerateMapperClass {
 
@@ -15,24 +21,18 @@ public class GenerateMapperClass {
 	}
 
 	public void execute(GenerateMapperClassInput input) {
-		List<ClassGeneratorPropertyInput> properties = convertProperties(input);
+		List<ClassGeneratorProperty> properties = convertProperties(input);
 		generator.generate(input.getClassName(), properties);
 	}
 	
-	public List<ClassGeneratorPropertyInput> convertProperties(GenerateMapperClassInput input) {
+	public List<ClassGeneratorProperty> convertProperties(GenerateMapperClassInput input) {
 		return input.getProperties().stream()
 			.map(prop -> {
-				if (prop.getAnnotation().isPresent()) {
-					return ClassGeneratorPropertyInput.builder()
-									.clazz(prop.getClazz())
-									.name(prop.getName())
-									.annotation(prop.getAnnotation().get())
-									.build();
-				}
-				return ClassGeneratorPropertyInput.builder()
-						.clazz(prop.getClazz())
-						.name(prop.getName())
-						.build();
+				return ClassGeneratorProperty.builder()
+								.clazz(prop.getClazz())
+								.name(prop.getName())
+								.annotations(asList(new ClassGeneratorPropertyAnnotation(Column.class, asList(new ClassGeneratorPropertyAnnotationAttribute("name", "MY_COLUMN")))))
+								.build();
 			})
 			.collect(Collectors.toList());
 	}

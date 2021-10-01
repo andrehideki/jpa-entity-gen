@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;

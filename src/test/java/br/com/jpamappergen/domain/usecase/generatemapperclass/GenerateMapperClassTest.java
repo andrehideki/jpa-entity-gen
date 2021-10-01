@@ -7,13 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.persistence.Column;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.jpamappergen.domain.usecase.generatemapperclass.GenerateMapperClass;
-import br.com.jpamappergen.domain.usecase.generatemapperclass.GenerateMapperClassInput;
 import br.com.jpamappergen.domain.usecase.generatemapperclass.GenerateMapperClassInput.GenerateMapperClassPropertyInput;
 import br.com.jpamappergen.infra.jsonschema2pojo.JsonSchema2PojoClassGenerator;
 
@@ -52,7 +48,7 @@ public class GenerateMapperClassTest {
 				GenerateMapperClassPropertyInput.builder()
 					.name("name")
 					.clazz(String.class)
-					.annotation(Column.class)
+					.columnName("C_NAME")
 					.build()
 				);
 		generateMapperClass.execute(GenerateMapperClassInput.builder()
