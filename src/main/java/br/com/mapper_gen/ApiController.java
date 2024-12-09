@@ -14,18 +14,25 @@ public class ApiController {
     @Autowired
     private DatabaseService databaseService;
 
+    @GetMapping("object")
+    public ResponseEntity<?> getObject(
+        @RequestParam(defaultValue = "") String name
+    ) {
+        return ResponseEntity.ok(databaseService.getTable(name));
+    }
+
     @GetMapping("tables")
     public ResponseEntity<?> getTables(
         @RequestParam(defaultValue = "") String name
     ) {
-        return ResponseEntity.ok(databaseService.getDatabaseTables(name));
+        return ResponseEntity.ok(databaseService.getTables(name));
     }
 
     @GetMapping("views")
     public ResponseEntity<?> getViews(
         @RequestParam(defaultValue = "") String name
     ) {
-        return ResponseEntity.ok(databaseService.getDatabaseViews(name));
+        return ResponseEntity.ok(databaseService.getViews(name));
     }
 
     @GetMapping("procedures")
@@ -34,4 +41,6 @@ public class ApiController {
     ) {
         return ResponseEntity.ok(databaseService.getProcedures(name));
     }
+
+   
 }
