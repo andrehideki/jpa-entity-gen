@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import br.com.mapper_gen.dto.Table;
+import br.com.mapper_gen.dto.View;
 
 
 @Service
@@ -23,14 +24,17 @@ public class DatabaseService {
         this.jdbc = jdbc;
     }
 
-    public List<Table> getDatabaseTables() {
+    public List<Table> getDatabaseTables(String table) {
+        table = table.toUpperCase();
         return jdbc.query("""
             SELECT table_name, owner
             FROM all_tables  
-            WHERE owner = '{owner}' 
+            WHERE owner = '{owner}' AND 
+            table_name like '%{table_name}%'
             ORDER BY table_name
         """
-        .replace("{owner}", schema)    
+        .replace("{owner}", schema)
+        .replace("{table_name}", table)
         , (rs, row) -> {
             return new Table(
                 rs.getString("table_name"),
@@ -38,4 +42,24 @@ public class DatabaseService {
             );
         });
     }
+
+    public List<View> getDatabaseViews(String name) {
+        name = name.toUpperCase();
+        return jdbc.query("""
+            SELECT view_name, owner
+            FROM all_views  
+            WHERE owner = '{owner}' AND 
+            view_name like '%{view_name}%'
+            ORDER BY view_name
+        """
+        .replace("{owner}", schema)
+        .replace("{view_name}", name)
+        , (rs, row) -> {
+            return new View(
+                rs.getString("view_name"),
+                rs.getString("owner")
+            );
+        });
+    }
+    
 }
