@@ -14,8 +14,8 @@ public class ApiController {
     @Autowired
     private DatabaseService databaseService;
 
-    @GetMapping
-    public ResponseEntity<?> get(
+    @GetMapping("tables")
+    public ResponseEntity<?> getTables(
         @RequestParam(defaultValue = "") String name
     ) {
         return ResponseEntity.ok(databaseService.getDatabaseTables(name));
