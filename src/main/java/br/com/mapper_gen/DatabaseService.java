@@ -1,5 +1,7 @@
 package br.com.mapper_gen;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -93,30 +95,62 @@ public class DatabaseService {
     public DatabaseObject getTable(String name) {
         if (!exists(name)) throw new RuntimeException("Failed to find: " + name.toUpperCase());
         String type = getType(name);
+        if (Arrays.asList("VIEW", "TABLE").contains(type)) {
+            String sql = """
+                SELECT column_name, data_type, data_length, data_precision, nullable 
+                FROM all_tab_columns 
+                WHERE table_name = '{name}' AND owner = '{owner}'
+                ORDER BY column_name
+            """
+            .replace("{owner}", schema)
+            .replace("{name}", name.toUpperCase());
+                        
+            var attrs = jdbc.query(sql, (rs, row) -> {
+                return new DatabaseObject.Attr(
+                    rs.getString("column_name"),
+                    rs.getString("data_type"),
+                    rs.getInt("data_length"),
+                    rs.getInt("data_precision"),
+                    "Y".equals(rs.getString("nullable"))
+                );
+            });
+            return new DatabaseObject(
+                name.toUpperCase(),
+                schema,
+                type,
+                attrs,
+                new ArrayList<>()
+            );
+        }
+
         String sql = """
-            SELECT column_name, data_type, data_length, data_precision, nullable 
-            FROM all_tab_columns 
-            WHERE table_name = '{name}' AND owner = '{owner}'
-            ORDER BY column_name
+            SELECT ARGUMENT_NAME, DATA_TYPE, IN_OUT, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, SEQUENCE
+            FROM all_arguments 
+            WHERE 
+            owner = '{owner}'
+            AND object_name = '{name}'
+            ORDER BY sequence
         """
         .replace("{owner}", schema)
         .replace("{name}", name.toUpperCase());
-                    
-        var attrs = jdbc.query(sql, (rs, row) -> {
-            return new DatabaseObject.Attr(
-                rs.getString("column_name"),
-                rs.getString("data_type"),
+
+        var args = jdbc.query(sql, (rs, row) -> {
+            return new DatabaseObject.Arg(
+                rs.getString("ARGUMENT_NAME"),
+                rs.getString("DATA_TYPE"),
                 rs.getInt("data_length"),
                 rs.getInt("data_precision"),
-                "Y".equals(rs.getString("nullable"))
+                "IN".equals(rs.getString("IN_OUT")),
+                "OUT".equals(rs.getString("IN_OUT"))
             );
         });
-        System.out.println(sql);
+
         return new DatabaseObject(
             name.toUpperCase(),
             schema,
             type,
-            attrs
+            new ArrayList<>(),
+            args
         );
     }
 }
