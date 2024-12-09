@@ -15,7 +15,7 @@ public record DatabaseObject(
         int dataLength,
         int dataPrecision,
         boolean nullable
-    ) {}    
+    ) {}
 
     public static record Arg(
         String name,
