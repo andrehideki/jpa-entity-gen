@@ -61,5 +61,25 @@ public class DatabaseService {
             );
         });
     }
+
+    public List<View> getProcedures(String name) {
+        name = name.toUpperCase();
+        return jdbc.query("""
+            SELECT OBJECT_NAME, owner
+            FROM all_objects   
+            WHERE owner = '{owner}' AND 
+            object_name like '%{object_name}%'
+            AND object_type IN ('PROCEDURE', 'FUNCTION')
+            ORDER BY OBJECT_NAME
+        """
+        .replace("{owner}", schema)
+        .replace("{object_name}", name)
+        , (rs, row) -> {
+            return new View(
+                rs.getString("object_name"),
+                rs.getString("owner")
+            );
+        });
+    }
     
 }

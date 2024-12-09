@@ -27,4 +27,11 @@ public class ApiController {
     ) {
         return ResponseEntity.ok(databaseService.getDatabaseViews(name));
     }
+
+    @GetMapping("procedures")
+    public ResponseEntity<?> getProcedures(
+        @RequestParam(defaultValue = "") String name
+    ) {
+        return ResponseEntity.ok(databaseService.getProcedures(name));
+    }
 }
