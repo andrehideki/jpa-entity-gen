@@ -1,4 +1,4 @@
-package br.com.mapper_gen;
+package br.com.mapper_gen.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,7 +92,7 @@ public class DatabaseService {
         , (rs, row) -> rs.getString("object_name"));
     }
 
-    public DatabaseObject getTable(String name) {
+    public DatabaseObject getDatabaseObject(String name) {
         if (!exists(name)) throw new RuntimeException("Failed to find: " + name.toUpperCase());
         String type = getType(name);
         if (Arrays.asList("VIEW", "TABLE").contains(type)) {
