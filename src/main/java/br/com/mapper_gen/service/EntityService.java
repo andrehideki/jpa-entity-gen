@@ -43,7 +43,7 @@ public class EntityService {
         var javaFile = JavaFile.builder("", classBuilder.build())
             .build();
         javaFile.writeToFile(new File(outputDir));
-        return true;
+        return databaseObject;
     }
 
     private String toCamelCase(String value, boolean firstLetterCaptalize) {

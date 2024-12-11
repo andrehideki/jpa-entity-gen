@@ -14,7 +14,8 @@ public record DatabaseObject(
         String type,
         int dataLength,
         int dataPrecision,
-        boolean nullable
+        boolean nullable,
+        boolean isPrimaryKey
     ) {}
 
     public static record Arg(

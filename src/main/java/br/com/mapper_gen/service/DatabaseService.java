@@ -97,10 +97,29 @@ public class DatabaseService {
         String type = getType(name);
         if (Arrays.asList("VIEW", "TABLE").contains(type)) {
             String sql = """
-                SELECT column_name, data_type, data_length, data_precision, nullable 
-                FROM all_tab_columns 
-                WHERE table_name = '{name}' AND owner = '{owner}'
-                ORDER BY column_name
+                SELECT c.column_name,
+                c.data_type,
+                c.data_length,
+                c.data_precision,
+                c.nullable,
+                CASE 
+                    WHEN pk.constraint_type = 'P' THEN 'YES'
+                    ELSE 'NO'
+                END AS is_primary_key
+                FROM all_tab_columns c
+                LEFT JOIN (
+                    SELECT cc.column_name, ac.table_name, ac.owner, ac.constraint_type
+                    FROM all_constraints ac
+                    INNER JOIN all_cons_columns cc
+                    ON ac.constraint_name = cc.constraint_name AND ac.owner = cc.owner
+                    WHERE ac.constraint_type = 'P'
+                ) pk
+                ON c.table_name = pk.table_name 
+                AND c.owner = pk.owner 
+                AND c.column_name = pk.column_name
+                WHERE c.table_name = '{name}'
+                AND c.owner = '{owner}'
+                ORDER BY c.column_name
             """
             .replace("{owner}", schema)
             .replace("{name}", name.toUpperCase());
@@ -111,9 +130,11 @@ public class DatabaseService {
                     rs.getString("data_type"),
                     rs.getInt("data_length"),
                     rs.getInt("data_precision"),
-                    "Y".equals(rs.getString("nullable"))
+                    "Y".equals(rs.getString("nullable")),
+                    "YES".equals(rs.getString("is_primary_key"))
                 );
             });
+
             return new DatabaseObject(
                 name.toUpperCase(),
                 schema,
